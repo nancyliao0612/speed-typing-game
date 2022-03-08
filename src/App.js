@@ -24,18 +24,14 @@ function App() {
     return wordsArr.filter((word) => word !== "").length;
   }
 
-  function endGame() {
-    setStart(false);
-    setWordCount(countWords(text));
-  }
-
   useEffect(() => {
     if (start && timeRemaining > 0) {
       setTimeout(() => {
         setTimeRemaining((prevTime) => prevTime - 1);
       }, 1000);
     } else if (timeRemaining === 0) {
-      endGame();
+      setStart(false);
+      setWordCount(countWords(text));
     }
   }, [timeRemaining, start]);
 
