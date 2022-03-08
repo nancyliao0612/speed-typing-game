@@ -1,25 +1,19 @@
 /**
  * Challenge:
+ * When the timer reaches 0, count the number of words the user typed in
+ * and display it in the "Word count" section
  *
- * Make it so clicking the Start button starts the timer instead of it starting on refresh (Hint: use a new state variable to indicate if the game should be running or not)
+ * After the game ends, make it so the user can click the Start button again
+ * to play a second time
  * */
 
 import React, { useState, useEffect } from "react";
 
 function App() {
   const [text, setText] = useState("");
-  const [timeRemaining, setTimeRemaining] = useState(5);
+  const [timeRemaining, setTimeRemaining] = useState(15);
   const [start, setStart] = useState(false);
-
-  useEffect(() => {
-    if (start && timeRemaining > 0) {
-      setTimeout(() => {
-        setTimeRemaining((prevTime) => prevTime - 1);
-      }, 1000);
-    } else if (timeRemaining === 0) {
-      setStart(false);
-    }
-  }, [timeRemaining, start]);
+  const [wordCount, setWordCount] = useState(0);
 
   function handleText(e) {
     setText(e.target.value);
@@ -30,17 +24,41 @@ function App() {
     return wordsArr.filter((word) => word !== "").length;
   }
 
+  function endGame() {
+    setStart(false);
+    setWordCount(countWords(text));
+  }
+
+  useEffect(() => {
+    if (start && timeRemaining > 0) {
+      setTimeout(() => {
+        setTimeRemaining((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timeRemaining === 0) {
+      endGame();
+    }
+  }, [timeRemaining, start]);
+
   function startGame() {
     setStart(true);
+    setText("");
+    setTimeRemaining(15);
   }
 
   return (
     <main>
       <h1>How fast do you type?</h1>
-      <textarea value={text} onChange={handleText} className="textarea" />
-      <h4>Time remaining: {timeRemaining}</h4>
-      <button onClick={startGame}>Start</button>
-      <h1>Word Count:</h1>
+      <textarea
+        value={text}
+        onChange={handleText}
+        className="textarea"
+        disabled={!start}
+      />
+      <h4>Time remaining: {timeRemaining} sec</h4>
+      <button onClick={startGame} disabled={start}>
+        Start
+      </button>
+      <h1>Word Count: {wordCount}</h1>
     </main>
   );
 }
