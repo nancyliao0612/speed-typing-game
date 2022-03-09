@@ -1,45 +1,29 @@
 /**
  * Challenge:
- * Make the input box focus (DOM elements have a method called .focus())
- * immediately when the game starts
+ * Move the "business logic" into a custom hook, which will provide
+ * any parts of state and any functions to this component to use.
+ *
+ * You can easily tell which parts the component needs by looking at
+ * the variables being used inside the `return`ed markup below.
  */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
+import useWordGame from "./useWordGame";
 
 function App() {
-  const [text, setText] = useState("");
-  const [timeRemaining, setTimeRemaining] = useState(15);
-  const [start, setStart] = useState(false);
-  const [wordCount, setWordCount] = useState(0);
-  const textBoxRef = useRef(null);
-
-  function handleText(e) {
-    setText(e.target.value);
-  }
-
-  function countWords(text) {
-    const wordsArr = text.trim().split(" ");
-    return wordsArr.filter((word) => word !== "").length;
-  }
-
-  useEffect(() => {
-    if (start && timeRemaining > 0) {
-      setTimeout(() => {
-        setTimeRemaining((prevTime) => prevTime - 1);
-      }, 1000);
-    } else if (timeRemaining === 0) {
-      setStart(false);
-      setWordCount(countWords(text));
-    }
-  }, [timeRemaining, start]);
-
-  function startGame() {
-    setStart(true);
-    setText("");
-    setTimeRemaining(15);
-    textBoxRef.current.disabled = false;
-    textBoxRef.current.focus();
-  }
+  const {
+    text,
+    start,
+    textBoxRef,
+    timeRemaining,
+    wordCount,
+    countWords,
+    setTimeRemaining,
+    handleText,
+    setStart,
+    startGame,
+    setWordCount,
+  } = useWordGame();
 
   return (
     <main>
