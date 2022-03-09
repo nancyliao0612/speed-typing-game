@@ -1,19 +1,17 @@
 /**
  * Challenge:
- * When the timer reaches 0, count the number of words the user typed in
- * and display it in the "Word count" section
- *
- * After the game ends, make it so the user can click the Start button again
- * to play a second time
- * */
+ * Make the input box focus (DOM elements have a method called .focus())
+ * immediately when the game starts
+ */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function App() {
   const [text, setText] = useState("");
-  const [timeRemaining, setTimeRemaining] = useState(15);
+  const [timeRemaining, setTimeRemaining] = useState(5);
   const [start, setStart] = useState(false);
   const [wordCount, setWordCount] = useState(0);
+  const textBoxRef = useRef(null);
 
   function handleText(e) {
     setText(e.target.value);
@@ -38,13 +36,16 @@ function App() {
   function startGame() {
     setStart(true);
     setText("");
-    setTimeRemaining(15);
+    setTimeRemaining(5);
+    textBoxRef.current.disabled = false;
+    textBoxRef.current.focus();
   }
 
   return (
     <main>
       <h1>How fast do you type?</h1>
       <textarea
+        ref={textBoxRef}
         value={text}
         onChange={handleText}
         className="textarea"
