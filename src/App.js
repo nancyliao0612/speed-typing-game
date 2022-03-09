@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 function App() {
   const [text, setText] = useState("");
-  const [timeRemaining, setTimeRemaining] = useState(5);
+  const [timeRemaining, setTimeRemaining] = useState(15);
   const [start, setStart] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const textBoxRef = useRef(null);
@@ -36,7 +36,7 @@ function App() {
   function startGame() {
     setStart(true);
     setText("");
-    setTimeRemaining(5);
+    setTimeRemaining(15);
     textBoxRef.current.disabled = false;
     textBoxRef.current.focus();
   }
